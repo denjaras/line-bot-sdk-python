@@ -24,27 +24,24 @@ app = Flask(__name__)
 configuration = Configuration(access_token='LINE_CHANNEL_ACCESS_TOKEN')
 handler = WebhookHandler('LINE_CHANNEL_SECRET')
 
-
 @app.route("/callback", methods=['POST'])
 def callback():
-    # リクエストボディを取得
+    # get X-Line-Signature header value
+    signature = request.headers['X-Line-Signature']
+
+    # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info(f"Request body: {body}")
+    app.logger.info("Request body: " + body)
 
-    # 署名ヘッダーを取得
-    signature = request.headers.get('X-Line-Signature', 'Missing')
-
+    # handle webhook body
     try:
-        # Webhookイベントを処理
         handler.handle(body, signature)
     except InvalidSignatureError:
-        app.logger.error(f"Invalid signature. Received signature: {signature}")
-        abort(400)
-    except Exception as e:
-        app.logger.error(f"Unexpected error: {str(e)}")
+        app.logger.info("Invalid signature. Please check your channel access token/channel secret.")
         abort(400)
 
     return 'OK'
+
 
 
 @handler.add(MessageEvent, message=TextMessageContent)
