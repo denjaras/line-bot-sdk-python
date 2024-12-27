@@ -36,17 +36,19 @@ app = Flask(__name__)
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    # X-Line-Signature ヘッダーの検証をスキップ（テスト用）
+    # リクエストボディをログ出力
     body = request.get_data(as_text=True)
     app.logger.info(f"Request body: {body}")
-
+    
     try:
-        handler.handle(body, "test_signature")  # 仮の署名を使用
+        # 署名検証をスキップ（テスト用）
+        handler.handle(body, "test_signature")  # 仮の署名
     except Exception as e:
         app.logger.error(f"Error: {str(e)}")
         abort(400)
-    
+
     return 'OK'
+
 
 
 
