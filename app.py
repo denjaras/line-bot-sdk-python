@@ -37,15 +37,22 @@ def callback():
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
     try:
+        # ユーザーからのメッセージを受け取る
+        app.logger.info(f"Received message: {event.message.text}")
+        
+        # 返信メッセージを作成
         reply_message = f"あなたのメッセージ: {event.message.text}"
-        app.logger.info(f"Received message: {event.message.text}")  # ログ：受信メッセージ
-        app.logger.info(f"Replying with message: {reply_message}")  # ログ：返信メッセージ
+        app.logger.info(f"Replying with message: {reply_message}")
+
+        # 返信を送信
         line_bot_api.reply_message(
             reply_token=event.reply_token,
             messages=[TextMessage(text=reply_message)]
         )
+        app.logger.info("Reply sent successfully")
     except Exception as e:
-        app.logger.error(f"Error while replying to message: {str(e)}")  # ログ：エラー詳細
+        # エラーが発生した場合はログに出力
+        app.logger.error(f"Error while handling message: {str(e)}")
 
 
 if __name__ == "__main__":
