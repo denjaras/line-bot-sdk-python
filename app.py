@@ -36,7 +36,7 @@ app = Flask(__name__)
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    # リクエストボディをログ出力
+    # リクエストボディを取得
     body = request.get_data(as_text=True)
     app.logger.info(f"Request body: {body}")
     
@@ -44,9 +44,10 @@ def callback():
         # 署名検証をスキップ（テスト用）
         handler.handle(body, "test_signature")  # 仮の署名
     except Exception as e:
+        # エラーログを記録
         app.logger.error(f"Error: {str(e)}")
         abort(400)
-
+    
     return 'OK'
 
 
