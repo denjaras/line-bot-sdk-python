@@ -9,4 +9,4 @@ Deprecated
 
 # ChatGPTによるHeroku用必須追加パッケージ
 flask
-line-bot-sdk
+line-bot-sdk>=3.0.0
