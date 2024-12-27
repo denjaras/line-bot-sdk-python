@@ -2,7 +2,7 @@ from flask import Flask, request, abort
 
 #以下から
 from linebot.v3.messaging import MessagingApi, Configuration
-from linebot.v3.webhooks import WebhookHandler
+from linebot.v3.webhook import WebhookHandler
 
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 line_bot_api = MessagingApi(configuration)
