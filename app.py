@@ -36,12 +36,15 @@ def callback():
 
 @handler.add(MessageEvent, message=TextMessage)
 def handle_message(event):
-    # ユーザーからのメッセージをそのまま返信
-    reply_message = f"あなたのメッセージ: {event.message.text}"
-    line_bot_api.reply_message(
-        reply_token=event.reply_token,
-        messages=[TextMessage(text=reply_message)]
-    )
+    try:
+        reply_message = f"あなたのメッセージ: {event.message.text}"
+        app.logger.info(f"Replying to message: {reply_message}")  # ログ出力
+        line_bot_api.reply_message(
+            reply_token=event.reply_token,
+            messages=[TextMessage(text=reply_message)]
+        )
+    except Exception as e:
+        app.logger.error(f"Error while replying to message: {str(e)}")  # エラーログ
 
 if __name__ == "__main__":
     # Heroku用のポート設定
