@@ -4,9 +4,9 @@ from flask import Flask, request, abort
 from linebot.v3.messaging import MessagingApi, Configuration
 from linebot.v3.webhook import WebhookHandler
 
-configuration = Configuration(access_token=YOUR_CHANNEL_ACCESS_TOKEN)
+configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 line_bot_api = MessagingApi(configuration)
-handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 import os 
 #ここまでkuratoの追記
@@ -18,8 +18,8 @@ from linebot.models import MessageEvent, TextMessage, TextSendMessage
 
 app = Flask(__name__)
 
-line_bot_api = LineBotApi(YOUR_CHANNEL_ACCESS_TOKEN)
-handler = WebhookHandler(YOUR_CHANNEL_SECRET)
+line_bot_api = LineBotApi(LINE_CHANNEL_ACCESS_TOKEN)
+handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 @app.route("/callback", methods=['POST'])
 def callback():
