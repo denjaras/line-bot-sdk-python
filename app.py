@@ -55,30 +55,30 @@ def callback():
 
 
 
-@handler.add(MessageEvent, message=TextMessageContent)
-def handle_message(event):
-    user_id = event.source.user_id
-    received_message = event.message.text
-    app.logger.info(f"Message from user {user_id}: {received_message}")
+# @handler.add(MessageEvent, message=TextMessageContent)
+# def handle_message(event):
+#     user_id = event.source.user_id
+#     received_message = event.message.text
+#     app.logger.info(f"Message from user {user_id}: {received_message}")
 
-    try:
-        user_message = event.message.text
-        app.logger.info(f"Received message: {user_message}")
+#     try:
+#         user_message = event.message.text
+#         app.logger.info(f"Received message: {user_message}")
         
-        reply_message = f"あなたのメッセージ: {user_message}"
-        app.logger.info(f"Replying with message: {reply_message}")
+#         reply_message = f"あなたのメッセージ: {user_message}"
+#         app.logger.info(f"Replying with message: {reply_message}")
 
-        with ApiClient(configuration) as api_client:
-            line_bot_api = MessagingApi(api_client)
-            line_bot_api.reply_message_with_http_info(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=[TextMessage(text=reply_message)]
-                )
-            )
-        app.logger.info("Reply sent successfully")
-    except Exception as e:
-        app.logger.error(f"Error while handling message: {str(e)}")
+#         with ApiClient(configuration) as api_client:
+#             line_bot_api = MessagingApi(api_client)
+#             line_bot_api.reply_message_with_http_info(
+#                 ReplyMessageRequest(
+#                     reply_token=event.reply_token,
+#                     messages=[TextMessage(text=reply_message)]
+#                 )
+#             )
+#         app.logger.info("Reply sent successfully")
+#     except Exception as e:
+#         app.logger.error(f"Error while handling message: {str(e)}")
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))  # Heroku用のポート設定
