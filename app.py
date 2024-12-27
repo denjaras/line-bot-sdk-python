@@ -42,7 +42,7 @@ def callback():
     
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
-        app.logger.info(f"X-Line-Signature: {signature}")
+    app.logger.info(f"X-Line-Signature: {signature}")
 
     # handle webhook body
     try:
