@@ -18,37 +18,37 @@ handler = WebhookHandler(LINE_CHANNEL_SECRET)
 # Flaskアプリの設定
 app = Flask(__name__)
 
-# @app.route("/callback", methods=['POST'])
-# def callback():
-#     # X-Line-Signatureヘッダーを取得
-#     signature = request.headers['X-Line-Signature']
-    
-#     # リクエストボディを取得
-#     body = request.get_data(as_text=True)
-    
-#     try:
-#         # Webhookイベントを処理
-#         handler.handle(body, signature)
-#     except InvalidSignatureError:
-#         abort(400)
-    
-#     return 'OK'
-
 @app.route("/callback", methods=['POST'])
 def callback():
+    # X-Line-Signatureヘッダーを取得
+    signature = request.headers['X-Line-Signature']
+    
     # リクエストボディを取得
     body = request.get_data(as_text=True)
-    app.logger.info(f"Request body: {body}")
     
     try:
-        # 署名検証をスキップ（テスト用）
-        handler.handle(body, "test_signature")  # 仮の署名
-    except Exception as e:
-        # エラーログを記録
-        app.logger.error(f"Error: {str(e)}")
+        # Webhookイベントを処理
+        handler.handle(body, signature)
+    except InvalidSignatureError:
         abort(400)
     
     return 'OK'
+
+# @app.route("/callback", methods=['POST'])
+# def callback():
+#     # リクエストボディを取得
+#     body = request.get_data(as_text=True)
+#     app.logger.info(f"Request body: {body}")
+    
+#     try:
+#         # 署名検証をスキップ（テスト用）
+#         handler.handle(body, "test_signature")  # 仮の署名
+#     except Exception as e:
+#         # エラーログを記録
+#         app.logger.error(f"Error: {str(e)}")
+#         abort(400)
+    
+#     return 'OK'
 
 
 
