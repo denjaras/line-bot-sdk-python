@@ -61,11 +61,13 @@ def callback():
 def generate_reply(message):
     openai.api_key = os.getenv("OPENAI_API_KEY")
     try:
-        response = openai.Completion.create(
-            engine="text-davinci-003",  # 使用するモデル
-            prompt=f"User: {message}\nAI:",
-            max_tokens=100,
-            temperature=0.7
+        response = openai.ChatCompletion.create(
+            model="gpt-4",
+            messages=[
+                {"role": "system", "content": "You are a helpful assistant."},
+                {"role": "user", "content": "Hello, world!"}
+            ],
+            max_tokens=50
         )
         reply = response.choices[0].text.strip()
         return reply
