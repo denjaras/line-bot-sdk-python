@@ -36,7 +36,8 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
+    # app.logger.info("Request body: " + body)
+    app.logger.info("Vienna")
 
     # handle webhook body
     try:
@@ -48,16 +49,16 @@ def callback():
     return 'OK'
 
 
-@handler.add(MessageEvent, message=TextMessageContent)
-def handle_message(event):
-    with ApiClient(configuration) as api_client:
-        line_bot_api = MessagingApi(api_client)
-        line_bot_api.reply_message_with_http_info(
-            ReplyMessageRequest(
-                reply_token=event.reply_token,
-                messages=[TextMessage(text=event.message.text)]
-            )
-        )
+# @handler.add(MessageEvent, message=TextMessageContent)
+# def handle_message(event):
+#     with ApiClient(configuration) as api_client:
+#         line_bot_api = MessagingApi(api_client)
+#         line_bot_api.reply_message_with_http_info(
+#             ReplyMessageRequest(
+#                 reply_token=event.reply_token,
+#                 messages=[TextMessage(text=event.message.text)]
+#             )
+#         )
 
 if __name__ == "__main__":
     port = int(os.getenv("PORT", 5000))  # Heroku用のポート設定
