@@ -42,7 +42,7 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
-    
+
     # app.logger.info("Request body: " + body)
     app.logger.info("Vienna")
 
@@ -55,6 +55,10 @@ def callback():
 
     return 'OK'
 
+@handler.add(MessageEvent, message=TextMessageContent)
+def handle_message(event):
+    app.logger.info("MessageEvent handler triggered")
+    app.logger.info(f"Received message: {event.message.text}")
 
 # @handler.add(MessageEvent, message=TextMessageContent)
 # def handle_message(event):
