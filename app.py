@@ -1,4 +1,6 @@
 import os
+import logging  # 追加
+
 from flask import Flask, request, abort
 
 from linebot.v3 import (
@@ -22,6 +24,10 @@ from linebot.v3.webhooks import (
 
 app = Flask(__name__)
 
+# ログレベルをINFOに設定
+logging.basicConfig(level=logging.INFO)  # ログ設定を明示
+app.logger.setLevel(logging.INFO)
+
 # 環境変数からLINE Botの設定を取得
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
@@ -36,6 +42,7 @@ def callback():
 
     # get request body as text
     body = request.get_data(as_text=True)
+    
     # app.logger.info("Request body: " + body)
     app.logger.info("Vienna")
 
