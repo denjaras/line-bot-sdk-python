@@ -25,24 +25,17 @@ app = Flask(__name__)
 LINE_CHANNEL_ACCESS_TOKEN = os.getenv("LINE_CHANNEL_ACCESS_TOKEN")
 LINE_CHANNEL_SECRET = os.getenv("LINE_CHANNEL_SECRET")
 
-
-if not LINE_CHANNEL_ACCESS_TOKEN:
-    raise ValueError("LINE_CHANNEL_ACCESS_TOKEN is not set in the environment variables.")
-if not LINE_CHANNEL_SECRET:
-    raise ValueError("LINE_CHANNEL_SECRET is not set in the environment variables.")
-
-
 configuration = Configuration(access_token=LINE_CHANNEL_ACCESS_TOKEN)
 handler = WebhookHandler(LINE_CHANNEL_SECRET)
 
 @app.route("/callback", methods=['POST'])
 def callback():
-    body = request.get_data(as_text=True)
-    app.logger.info("Request body: " + body)
-    
     # get X-Line-Signature header value
     signature = request.headers['X-Line-Signature']
-    app.logger.info(f"X-Line-Signature: {signature}")
+
+    # get request body as text
+    body = request.get_data(as_text=True)
+    app.logger.info("Request body: " + body)
 
     # handle webhook body
     try:
