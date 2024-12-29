@@ -19,6 +19,7 @@ from linebot.v3.webhooks import (
     TextMessageContent
 )
 
+
 app = Flask(__name__)
 
 # 環境変数からLINE Botの設定を取得
