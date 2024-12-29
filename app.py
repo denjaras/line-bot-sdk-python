@@ -21,6 +21,7 @@ from linebot.v3.webhooks import (
     TextMessageContent
 )
 
+import openai
 
 app = Flask(__name__)
 
@@ -55,26 +56,42 @@ def callback():
 
     return 'OK'
 
+
+# ChatGPT用の関数
+def generate_reply(message):
+    openai.api_key = os.getenv("OPENAI_API_KEY")
+    try:
+        response = openai.Completion.create(
+            engine="text-davinci-003",  # 使用するモデル
+            prompt=f"User: {message}\nAI:",
+            max_tokens=100,
+            temperature=0.7
+        )
+        reply = response.choices[0].text.strip()
+        return reply
+    except Exception as e:
+        app.logger.error(f"Error generating reply: {str(e)}")
+        return "申し訳ありませんが、現在応答できません。"
+
+
 @handler.add(MessageEvent, message=TextMessageContent)
 def handle_message(event):
-    app.logger.info("MessageEvent handler triggered")
-    app.logger.info(f"Received message: {event.message.text}")
-    try:
-        # 返信メッセージの作成と送信
-        reply_message = f"あなたのメッセージ: {event.message.text}"
-        app.logger.info(f"Replying with message: {reply_message}")
-
-        with ApiClient(configuration) as api_client:
-            line_bot_api = MessagingApi(api_client)
-            line_bot_api.reply_message_with_http_info(
-                ReplyMessageRequest(
-                    reply_token=event.reply_token,
-                    messages=[TextMessage(text=reply_message)]
-                )
+    user_message = event.message.text
+    app.logger.info(f"User message: {user_message}")
+    
+    # ChatGPTからの返信を取得
+    reply_message = generate_reply(user_message)
+    app.logger.info(f"Reply message: {reply_message}")
+    
+    # ユーザーに返信
+    with ApiClient(configuration) as api_client:
+        line_bot_api = MessagingApi(api_client)
+        line_bot_api.reply_message_with_http_info(
+            ReplyMessageRequest(
+                reply_token=event.reply_token,
+                messages=[TextMessage(text=reply_message)]
             )
-        app.logger.info("Reply sent successfully")
-    except Exception as e:
-        app.logger.error(f"Error while handling message: {str(e)}")
+        )
 
 # @handler.add(MessageEvent, message=TextMessageContent)
 # def handle_message(event):
