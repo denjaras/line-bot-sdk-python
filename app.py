@@ -59,6 +59,22 @@ def callback():
 def handle_message(event):
     app.logger.info("MessageEvent handler triggered")
     app.logger.info(f"Received message: {event.message.text}")
+    try:
+        # 返信メッセージの作成と送信
+        reply_message = f"あなたのメッセージ: {event.message.text}"
+        app.logger.info(f"Replying with message: {reply_message}")
+
+        with ApiClient(configuration) as api_client:
+            line_bot_api = MessagingApi(api_client)
+            line_bot_api.reply_message_with_http_info(
+                ReplyMessageRequest(
+                    reply_token=event.reply_token,
+                    messages=[TextMessage(text=reply_message)]
+                )
+            )
+        app.logger.info("Reply sent successfully")
+    except Exception as e:
+        app.logger.error(f"Error while handling message: {str(e)}")
 
 # @handler.add(MessageEvent, message=TextMessageContent)
 # def handle_message(event):
